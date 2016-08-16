@@ -11,10 +11,20 @@ public class CameraController : MonoBehaviour{
 	public  float stoppingRadius=3.5f, reachable=10f;
 	private float progress, moveForward=0;
 	public GameObject[] allObjects;
+	public Material[] materials;
 
 	void Start(){
 		current=null;
-		prepareAnim();	
+		prepareAnim();
+		paint();
+	}
+
+	void paint(){
+		for(int i=0; i<allObjects.Length; i++){
+			Renderer renderer=(Renderer)allObjects[i].GetComponent<Renderer>();
+			Material material=materials[((Entity)allObjects[i].GetComponent<Entity>()).color];
+			renderer.material=material;
+		}
 	}
 
 	void FixedUpdate(){
@@ -109,9 +119,7 @@ public class CameraController : MonoBehaviour{
 		isMoving=false;
 		current=target;
 		if(current.GetComponent<Entity>().isGoal){
-			print("win");
-			yield WaitForSeconds(3);  // or however long you want it to wait
-			Application.LoadLevel(Application.loadedLevel);
+			LevelsManager.win();
 		}
 	}
 
