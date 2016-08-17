@@ -1,35 +1,57 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Entity : MonoBehaviour {
+public class Entity : MonoBehaviour{
 	private Ray ray;
 	private RaycastHit hit;
 	private CameraController player;
 	public bool isGoal=false;
 	public int color=0;
+	private Renderer rend;
+	private static Material reachable;
+	private bool hover=false;
 
 	void Start(){
 		player=(CameraController)GameObject.FindWithTag("MainCamera").GetComponent<CameraController>();
+		rend=GetComponent<Renderer>();
+		rend.enabled=true;
 	}
 
 	void Update(){
-		ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		ray=Camera.main.ScreenPointToRay(Input.mousePosition);
 		if(Physics.Raycast(ray, out hit)){
-			player.hoverOn(gameObject);
+			if(!hover){
+				player.hoverOn(gameObject);
+				hover=true;
+			}
+		} else{
+			if(hover){
+				player.paint();
+				hover=false;
+			}
 		}
 	}
 
-	void OnMouseDown() {
-		if (Input.GetKey ("mouse 0")) {
+	void OnMouseDown(){
+		if(Input.GetKey("mouse 0")){
 			if(player.getCurrent().Equals(gameObject)){
 				player.clickSelf();
-			}else {
-				var success = player.setNewTarget(gameObject);
+			} else{
+				var success=player.setNewTarget(gameObject);
 			}
 		}
 	}
 
 	public void flash(){
-		//TODO
+		rend.material=reachable;
+	}
+
+	public void setObjectMaterial(Material m){
+		if(rend!=null)
+			rend.material=m;
+	}
+
+	public static void setReachableMaterial(Material m){
+		reachable=m;
 	}
 }

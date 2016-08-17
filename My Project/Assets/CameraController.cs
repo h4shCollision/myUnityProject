@@ -12,18 +12,19 @@ public class CameraController : MonoBehaviour{
 	private float progress, moveForward=0;
 	public GameObject[] allObjects;
 	public Material[] materials;
+	public Material accessible;
 
 	void Start(){
 		current=null;
 		prepareAnim();
 		paint();
+		Entity.setReachableMaterial(accessible);
 	}
 
-	void paint(){
+	public void paint(){
 		for(int i=0; i<allObjects.Length; i++){
-			Renderer renderer=(Renderer)allObjects[i].GetComponent<Renderer>();
 			Material material=materials[((Entity)allObjects[i].GetComponent<Entity>()).color];
-			renderer.material=material;
+			allObjects[i].GetComponent<Entity>().setObjectMaterial(material);
 		}
 	}
 
@@ -76,11 +77,11 @@ public class CameraController : MonoBehaviour{
 	}
 
 	public void hoverOn(GameObject obj){
-		if(isMoving){
+		if(isMoving || obj==current){
 			return;
 		}
 		for(int i=0; i<allObjects.Length; i++){
-			if(Vector3.Distance(obj.transform.position, allObjects[i].transform.position)<=reachable && obj!=allObjects[i] && obj!=current){
+			if(Vector3.Distance(obj.transform.position, allObjects[i].transform.position)<=reachable && obj!=allObjects[i] && allObjects[i]!=current){
 				((Entity)allObjects[i].GetComponent<Entity>()).flash();
 			}
 		}
@@ -91,6 +92,9 @@ public class CameraController : MonoBehaviour{
 		if(isMoving)
 			return false;
 		if(Vector3.Distance(current.transform.position, other.transform.position)>reachable){
+			return false;
+		}
+		if(other.GetComponent<Entity>().color!=current.GetComponent<Entity>().color){
 			return false;
 		}
 		target=other;

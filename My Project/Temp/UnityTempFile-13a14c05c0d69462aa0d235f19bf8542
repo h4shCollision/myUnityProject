@@ -81,7 +81,8 @@
 -define:UNITY_EDITOR_OSX
 -define:UNITY_TEAM_LICENSE
 'Assets/CameraController.cs'
-'Assets/Planet Earth Free/SpinFree.cs'
 'Assets/Scripts/Entity.cs'
+'Assets/Scripts/LevelsManager.cs'
+'Assets/StartButton.cs'
 -r:'/Applications/Unity/Unity.app/Contents/Frameworks/Mono/lib/mono/unity/System.Runtime.Serialization.dll'
 -r:'/Applications/Unity/Unity.app/Contents/Frameworks/Mono/lib/mono/unity/System.Xml.Linq.dll'
