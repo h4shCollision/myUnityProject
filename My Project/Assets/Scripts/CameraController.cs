@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.IO;
+using SimpleJSON;
 
 public class CameraController : MonoBehaviour{
 
 	public float rotationAmount;
-
 	private bool isMoving=false;
 	public GameObject target, current;
 	private Vector3 iniPos, displ;
@@ -13,12 +14,33 @@ public class CameraController : MonoBehaviour{
 	public GameObject[] allObjects;
 	public Material[] materials;
 	public Material accessible;
+	private int level=1;
+	private LevelData levelData;
+	public GameObject spherePrefab;
 
 	void Start(){
 		current=null;
+		loadLevelData();
+		createEntities();
 		prepareAnim();
 		paint();
 		Entity.setReachableMaterial(accessible);
+	}
+
+	private void createEntities(){
+		allObjects=new GameObject[levelData.getNumObjects()];
+		for(int i=0; i<levelData.getNumObjects(); i++){
+			allObjects[i]=Instantiate(spherePrefab);
+			allObjects[i].GetComponent<Entity>().setData(levelData.getData(i));
+			if(levelData.getData(i).target){
+				target=allObjects[i];			
+			}
+		}
+	}
+
+	private void loadLevelData(){
+		TextAsset asset=Resources.Load<TextAsset>(Path.Combine("Levels", "level"+level)) as TextAsset;
+		levelData=new LevelData(asset.text);
 	}
 
 	public void paint(){

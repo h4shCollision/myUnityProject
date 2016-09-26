@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEngine.SceneManagement;
 
 public class StartButton : MonoBehaviour {
 
@@ -15,6 +14,6 @@ public class StartButton : MonoBehaviour {
 	}
 
 	public void onClick(){
-		SceneManager.LoadScene("main");
+		LevelsManager.start();
 	}
 }

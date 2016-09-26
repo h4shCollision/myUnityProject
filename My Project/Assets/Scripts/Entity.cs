@@ -32,6 +32,12 @@ public class Entity : MonoBehaviour{
 		}
 	}
 
+	public void setData(ObjectData data){
+		color=data.color;
+		isGoal=data.isGoal;
+		transform.position=data.getPos();
+	}
+
 	void OnMouseDown(){
 		if(Input.GetKey("mouse 0")){
 			if(player.getCurrent().Equals(gameObject)){

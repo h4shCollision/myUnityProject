@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public static class LevelsManager{
 	public static void restart(){
@@ -7,6 +8,10 @@ public static class LevelsManager{
 	}
 
 	public static void win(){
-		Application.LoadLevel("main");
+		SceneManager.LoadScene("main");
+	}
+
+	public static void start(){
+		SceneManager.LoadScene("main");
 	}
 }
