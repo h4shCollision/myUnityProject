@@ -2,14 +2,19 @@
 using System.Collections;
 
 public class Entity : MonoBehaviour{
-	private Ray ray;
-	private RaycastHit hit;
 	private CameraController player;
 	public bool isGoal=false;
 	public int color=0;
 	private Renderer rend;
 	private static Material reachable;
 	private bool hover=false;
+	private int ID;
+	private static int count=0;
+
+	public Entity(){
+		ID=count;
+		count+=1;
+	}
 
 	void Start(){
 		player=(CameraController)GameObject.FindWithTag("MainCamera").GetComponent<CameraController>();
@@ -17,18 +22,17 @@ public class Entity : MonoBehaviour{
 		rend.enabled=true;
 	}
 
-	void Update(){
-		ray=Camera.main.ScreenPointToRay(Input.mousePosition);
-		if(Physics.Raycast(ray, out hit)){
-			if(!hover){
-				player.hoverOn(gameObject);
-				hover=true;
-			}
-		} else{
-			if(hover){
-				player.paint();
-				hover=false;
-			}
+	void OnMouseEnter(){
+		if(!hover){
+			player.hoverOn(gameObject);
+			hover=true;
+		}
+	}
+
+	void OnMouseExit(){
+		if(hover){
+			player.paint();
+			hover=false;
 		}
 	}
 
@@ -59,5 +63,9 @@ public class Entity : MonoBehaviour{
 
 	public static void setReachableMaterial(Material m){
 		reachable=m;
+	}
+
+	public bool equals(Entity other){
+		return ID==other.ID;
 	}
 }

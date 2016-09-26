@@ -19,12 +19,12 @@ public class CameraController : MonoBehaviour{
 	public GameObject spherePrefab;
 
 	void Start(){
+		Entity.setReachableMaterial(accessible);
 		current=null;
 		loadLevelData();
 		createEntities();
 		prepareAnim();
 		paint();
-		Entity.setReachableMaterial(accessible);
 	}
 
 	private void createEntities(){
@@ -103,7 +103,9 @@ public class CameraController : MonoBehaviour{
 			return;
 		}
 		for(int i=0; i<allObjects.Length; i++){
-			if(Vector3.Distance(obj.transform.position, allObjects[i].transform.position)<=reachable && obj!=allObjects[i] && allObjects[i]!=current){
+			if(Vector3.Distance(obj.transform.position, allObjects[i].transform.position)<=reachable 
+				&& !allObjects[i].GetComponent<Entity>().equals(obj.GetComponent<Entity>()) 
+				&& !allObjects[i].GetComponent<Entity>().equals(current.GetComponent<Entity>())){
 				((Entity)allObjects[i].GetComponent<Entity>()).flash();
 			}
 		}
@@ -156,5 +158,9 @@ public class CameraController : MonoBehaviour{
 	public void clickSelf(){
 		if(moveForward==0)
 			moveForward=0.5f;
+	}
+
+	public bool getIsMoving(){
+		return isMoving;
 	}
 }
