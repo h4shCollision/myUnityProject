@@ -14,11 +14,14 @@ public class CameraController : MonoBehaviour{
 	public GameObject[] allObjects;
 	public Material[] materials;
 	public Material accessible;
-	private int level=1;
+	private int level;
 	private LevelData levelData;
 	public GameObject spherePrefab;
 
 	void Start(){
+		level=LevelsManager.getCurrentLevel();
+		print("level"+level);
+		level=1;
 		Entity.setReachableMaterial(accessible);
 		current=null;
 		loadLevelData();
@@ -40,6 +43,7 @@ public class CameraController : MonoBehaviour{
 
 	private void loadLevelData(){
 		TextAsset asset=Resources.Load<TextAsset>(Path.Combine("Levels", "level"+level)) as TextAsset;
+		print(asset);
 		levelData=new LevelData(asset.text);
 	}
 
@@ -91,7 +95,7 @@ public class CameraController : MonoBehaviour{
 	void handleForward(){
 		if(moveForward>0){
 			moveForward-=Time.deltaTime;
-			transform.RotateAround(current.transform.position, transform.right, 0.5f);
+			transform.RotateAround(current.transform.position, Vector3.Cross(transform.position-current.transform.position,transform.forward), 0.5f);
 			if(moveForward<=0){
 				moveForward=0;		
 			}
