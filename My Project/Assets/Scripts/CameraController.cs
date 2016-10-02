@@ -11,16 +11,16 @@ public class CameraController : MonoBehaviour{
 	private Vector3 iniPos, displ;
 	public  float stoppingRadius=3.5f, reachable=10f;
 	private float progress, moveForward=0;
-	public GameObject[] allObjects;
+	private GameObject[] allObjects;
 	public Material[] materials;
 	public Material accessible;
+	public Canvas popup;
 	private int level;
 	private LevelData levelData;
 	public GameObject spherePrefab;
 
 	void Start(){
 		level=LevelsManager.getCurrentLevel();
-		print("level"+level);
 		level=1;
 		Entity.setReachableMaterial(accessible);
 		current=null;
@@ -43,7 +43,6 @@ public class CameraController : MonoBehaviour{
 
 	private void loadLevelData(){
 		TextAsset asset=Resources.Load<TextAsset>(Path.Combine("Levels", "level"+level)) as TextAsset;
-		print(asset);
 		levelData=new LevelData(asset.text);
 	}
 
@@ -151,7 +150,7 @@ public class CameraController : MonoBehaviour{
 		isMoving=false;
 		current=target;
 		if(current.GetComponent<Entity>().isGoal){
-			LevelsManager.win();
+			popup.GetComponent<WinPopUp>().show();
 		}
 	}
 
@@ -160,6 +159,8 @@ public class CameraController : MonoBehaviour{
 	}
 
 	public void clickSelf(){
+		if(isMoving)
+			return;
 		if(moveForward==0)
 			moveForward=0.5f;
 	}

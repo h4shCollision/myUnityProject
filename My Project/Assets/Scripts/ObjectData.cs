@@ -3,7 +3,8 @@ using UnityEngine;
 using SimpleJSON;
 
 public class ObjectData{
-	public int color,x,y,z;
+	public int color;
+	public float x,y,z;
 	public Boolean isGoal;
 	public Boolean target;
 	public Vector3 getPos(){
@@ -13,8 +14,8 @@ public class ObjectData{
 		color=json["color"].AsInt;
 		isGoal=json["isGoal"].AsBool;
 		target=json["target"].AsBool;
-		x=json["position"][0].AsInt;		
-		y=json["position"][1].AsInt;
-		z=json["position"][2].AsInt;
+		x=json["position"][0].AsFloat;		
+		y=json["position"][1].AsFloat;
+		z=json["position"][2].AsFloat;
 	}
 }
