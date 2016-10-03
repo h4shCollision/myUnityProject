@@ -10,6 +10,7 @@ public class Entity : MonoBehaviour{
 	private bool hover=false;
 	private int ID;
 	private static int count=0;
+	public Ring ring;
 
 	public Entity(){
 		ID=count;
@@ -31,7 +32,7 @@ public class Entity : MonoBehaviour{
 
 	void OnMouseExit(){
 		if(hover){
-			player.paint();
+			player.disableAll();
 			hover=false;
 		}
 	}
@@ -52,8 +53,17 @@ public class Entity : MonoBehaviour{
 		}
 	}
 
+	public void showReachability(bool reachable){
+		if(reachable){
+			ring.enable(player.transform, Ring.DIRECT_REACHABLE);
+		} else{
+			ring.enable(player.transform, Ring.NOT_DIRECT_REACHABLE);
+		}
+	}
+
 	public void flash(){
-		rend.material=reachable;
+//		rend.material=reachable;
+		ring.enable(player.transform,Ring.INDIRECT_REACHABLE);
 	}
 
 	public void setObjectMaterial(Material m){
@@ -67,5 +77,9 @@ public class Entity : MonoBehaviour{
 
 	public bool equals(Entity other){
 		return ID==other.ID;
+	}
+
+	public void disable(){
+		ring.disable();
 	}
 }

@@ -7,7 +7,8 @@ public class CameraController : MonoBehaviour{
 
 	public float rotationAmount;
 	private bool isMoving=false;
-	public GameObject target, current;
+	private GameObject target, current;
+	public GameObject spherePrefab;
 	private Vector3 iniPos, displ;
 	public  float stoppingRadius=3.5f, reachable=10f;
 	private float progress, moveForward=0;
@@ -17,7 +18,6 @@ public class CameraController : MonoBehaviour{
 	public Canvas popup;
 	private int level;
 	private LevelData levelData;
-	public GameObject spherePrefab;
 
 	void Start(){
 		level=LevelsManager.getCurrentLevel();
@@ -105,6 +105,11 @@ public class CameraController : MonoBehaviour{
 		if(isMoving || obj==current){
 			return;
 		}
+		if(Vector3.Distance(obj.transform.position, current.transform.position)<=reachable){//not optimized right now for potential additional stuff
+			obj.GetComponent<Entity>().showReachability(true);
+		} else{
+			obj.GetComponent<Entity>().showReachability(false);
+		}
 		for(int i=0; i<allObjects.Length; i++){
 			if(Vector3.Distance(obj.transform.position, allObjects[i].transform.position)<=reachable 
 				&& !allObjects[i].GetComponent<Entity>().equals(obj.GetComponent<Entity>()) 
@@ -142,6 +147,7 @@ public class CameraController : MonoBehaviour{
 			displ*=(dist-stoppingRadius)/dist;
 		}
 		isMoving=true;
+		disableAll();
 	}
 
 	private void stopAnim(){
@@ -151,6 +157,12 @@ public class CameraController : MonoBehaviour{
 		current=target;
 		if(current.GetComponent<Entity>().isGoal){
 			popup.GetComponent<WinPopUp>().show();
+		}
+	}
+
+	public void disableAll(){
+		for(int i=0; i<allObjects.Length; i++){
+			allObjects[i].GetComponent<Entity>().disable();
 		}
 	}
 
